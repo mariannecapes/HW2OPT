@@ -3,9 +3,9 @@ clear all
 close all
 clc
 
-addpath('Data3D/')
-addpath('Algorithms/')
-addpath('Tools/')
+addpath('Data3D')
+addpath('Algorithms')
+addpath('Tools')
 
 
 
