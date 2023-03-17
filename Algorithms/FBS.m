@@ -14,9 +14,10 @@ f =@(x) Obj_function( x,z,Neighb_mat,L, eta ) ;
 % TO COMPLETE
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Define step-size
-gamma = 1.9;
+gamma = 0.3 ;
+sigma = gamma/normL2;
 % Define gradient operator
-gradh =@(x) (x - z) ;
+gradh =@(x) x -z ;
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Define proximity operator
@@ -53,9 +54,9 @@ for it = 1:NbIt
     % TO COMPLETE
     % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % iterates
-    T=eta*gamma;
-    res = xold-eta*gamma*gradh(xold);
-    x=prox(res, T);
+    T = gamma;
+    u= xold - gamma * gradh(xold);
+    x = prox(u,T);
     % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     time(it+1) = toc(start) ;
@@ -125,7 +126,7 @@ function crit = Obj_function( x,z,Neighb_mat,L, eta )
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TO COMPLETE
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-fid = 0.5*(norm(x(:)-z(:))^2)  ;   
+fid = 0.5*(norm(x - z))^2   ;
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Lx = L(x) ;

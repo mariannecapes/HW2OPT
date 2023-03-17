@@ -20,14 +20,13 @@ Lx = L(x) ;
 % --------------------------------------------------------------
 
 % Define objective function
-f =@(x) Obj_function( x,z,Neighb_mat, L, eta ) ;
+f =@(x) Obj_function( x,z,Neighb_mat, L, eta) ;
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TO COMPLETE
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Define gradient operator
-gradh =@(x) norm(x-z);
-gradh = real(x -z); %TBC
+gradh =@(x) x-z ;
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Define proximity operator for TV regularisation
@@ -40,7 +39,8 @@ proxg =@(x,T) prox_tv_graph( x , Neighb_mat , Ind_current , T ) ;  % prox TV
 % Step-sizes
 gamma = 10 ;
 sigma = gamma/normL2 ; % DO NOT CHANGE - optimised for bunny example
-tau = ... ;
+%tau = 1/(gamma+(0.9/2)) ;
+tau = 1.9/(1+(2*gamma));
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 disp('******************************************')
@@ -85,18 +85,20 @@ for it = 1:NbIt
     % --------------------------------------------------------------
     % primal update: gradients and 3D box constraint
     % --------------------------------------------------------------
-    x_int = xold - tau * (gradh(xold) + Lt(u));
+    x_int = xold - tau*(gradh(xold)+Lt(u));
     x = proj_box(x_int, xmin, xmax);
     % --------------------------------------------------------------
     
     % --------------------------------------------------------------
     % dual update : prox TV
     % --------------------------------------------------------------
-    Lx = 2*Lx - Lxold;
+    T = eta/sigma ;
+    %T=1/sigma;
+    %Lx = 2*Lx - Lxold;
+    Lx = L(2*x - xold) ;
     u_int = u+sigma*Lx;
-    u = u_int - sigma*proxg(u_int, 1/sigma);
-   
-    ...
+    %u_int = u+sigma*L(2*x - xold);
+    u = u_int - sigma*proxg(u_int/sigma, T);
     % --------------------------------------------------------------
     % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
@@ -176,7 +178,7 @@ function crit = Obj_function( x,z,Neighb_mat,L, eta )
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TO COMPLETE
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-fid =   ;
+fid = 0.5*(norm(x(:)-z(:))^2)  ;  
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Lx = L(x) ;
