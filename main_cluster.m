@@ -60,7 +60,7 @@ disp(['RMSE noisy mesh: ', num2str(RMSE(z))])
 % TO COMPLETE
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Squared norm of operator L
-normL2 = ... ;
+normL2 = op_norm(L,Lt,size(xbar)) ;
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -107,17 +107,17 @@ disp('FISTA')
     FISTA(x0, z, Ind_current,Ind_neighb,eta, Ladj, Neighb_mat, xmin,xmax,normL2, NbIt,t, RMSE, Stop_norm, Stop_crit, display, display_graph) ;
 
 
-%% Primal-dual for 3D mesh denoising (constrained problem)
-
-% Maximum number of iterations
-l2_bound = 0.4 ;
-disp('******************************************')
-disp('Primal-dual algorithm for constrained problem')
-[xres_c,crit_c, norm_fid_c,time_c,rmse_c,norm_x_c] = ...
-    Primal_Dual_constrained_graph(x0, z, l2_bound, Ind_current,Ind_neighb,eta, Ladj, Neighb_mat, xmin,xmax, normL2, NbIt,t, RMSE, Stop_norm, Stop_crit, display, display_graph) ;
-disp('*******************************************************')
-disp('*******************************************************')
-
+% %% Primal-dual for 3D mesh denoising (constrained problem)
+% 
+% % Maximum number of iterations
+% l2_bound = 0.4 ;
+% disp('******************************************')
+% disp('Primal-dual algorithm for constrained problem')
+% [xres_c,crit_c, norm_fid_c,time_c,rmse_c,norm_x_c] = ...
+%     Primal_Dual_constrained_graph(x0, z, l2_bound, Ind_current,Ind_neighb,eta, Ladj, Neighb_mat, xmin,xmax, normL2, NbIt,t, RMSE, Stop_norm, Stop_crit, display, display_graph) ;
+% disp('*******************************************************')
+% disp('*******************************************************')
+% 
 
 %% Save results
 
